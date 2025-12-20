@@ -22,7 +22,7 @@ config global_haproxy
 
 config global_delay
 	option start_daemon '1'
-	option start_delay '60'
+	option start_delay '10'
 
 config global_forwarding
 	option tcp_no_redir_ports 'disable'
@@ -71,8 +71,9 @@ config global_singbox
 
 config nodes 'myshunt'
 	option remarks '分流总节点'
-	option type 'Xray'
+	option type 'sing-box'
 	option protocol '_shunt'
+	option TikTok '_default'
 	option DirectGame '_direct'
 	option ProxyGame '_default'
 	option Direct '_direct'
@@ -83,6 +84,41 @@ config nodes 'myshunt'
 	option default_node '_direct'
 	option domainStrategy 'IPOnDemand'
 	option domainMatcher 'hybrid'
+
+config shunt_rules 'TikTok'
+	option remarks 'TikTok'
+	option network 'tcp,udp'
+	option domain_list '# TikTok
+lf16-effectcdn.byteeffecttos-g.com
+lf16-pkgcdn.pitaya-clientai.com
+p16-tiktokcdn-com.akamaized.net
+trae-api-sg.mchost.guru
+bytedapm.com
+bytegecko-i18n.com
+byteintlapi.com
+byteoversea.com
+capcut.com
+ibytedtos.com
+ibyteimg.com
+ipstatp.com
+isnssdk.com
+marscode.com
+muscdn.com
+musical.ly
+sgpstatp.com
+snssdk.com
+tik-tokapi.com
+tiktok.com
+tiktokcdn-us.com
+tiktokcdn.com
+tiktokd.net
+tiktokd.org
+tiktokmusic.app
+tiktokv.com
+tiktokv.us
+trae.ai
+ttwebview.com
+geosite:tiktok'
 
 config shunt_rules 'DirectGame'
 	option remarks 'DirectGame'
