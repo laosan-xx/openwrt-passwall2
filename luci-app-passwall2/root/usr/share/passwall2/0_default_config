@@ -10,7 +10,8 @@ config global
 	option direct_dns_protocol 'auto'
 	option direct_dns_query_strategy 'UseIP'
 	option remote_dns_protocol 'tcp'
-	option remote_dns '1.1.1.1'
+	option remote_dns '8.8.8.8'
+	option remote_fakedns '1'
 	option remote_dns_query_strategy 'UseIPv4'
 	option dns_hosts 'cloudflare-dns.com 1.1.1.1
 dns.google.com 8.8.8.8'
@@ -22,7 +23,7 @@ config global_haproxy
 
 config global_delay
 	option start_daemon '1'
-	option start_delay '60'
+	option start_delay '10'
 
 config global_forwarding
 	option tcp_no_redir_ports 'disable'
@@ -72,20 +73,56 @@ config nodes 'myshunt'
 	option remarks '分流总节点'
 	option type 'Xray'
 	option protocol '_shunt'
-	option DirectGame '_direct'
-	option ProxyGame '_default'
+	option TikTok '_default'
+	option Reject '_blackhole'
 	option Direct '_direct'
-	option GooglePlay '_default'
 	option Proxy '_default'
-	option GFW '_default'
-	option China '_direct'
 	option QUIC '_blackhole'
 	option default_node '_direct'
-	option domainStrategy 'IPOnDemand'
+	option domainStrategy 'IPIfNonMatch'
 	option domainMatcher 'hybrid'
 
-config shunt_rules 'DirectGame'
-	option remarks 'DirectGame'
+config shunt_rules 'TikTok'
+	option remarks 'TikTok'
+	option network 'tcp,udp'
+	option domain_list '# TikTok
+lf16-effectcdn.byteeffecttos-g.com
+lf16-pkgcdn.pitaya-clientai.com
+p16-tiktokcdn-com.akamaized.net
+trae-api-sg.mchost.guru
+bytedapm.com
+bytegecko-i18n.com
+byteintlapi.com
+byteoversea.com
+capcut.com
+ibytedtos.com
+ibyteimg.com
+ipstatp.com
+isnssdk.com
+marscode.com
+muscdn.com
+musical.ly
+sgpstatp.com
+snssdk.com
+tik-tokapi.com
+tiktok.com
+tiktokcdn-us.com
+tiktokcdn.com
+tiktokd.net
+tiktokd.org
+tiktokmusic.app
+tiktokv.com
+tiktokv.us
+trae.ai
+ttwebview.com
+geosite:tiktok'
+
+config shunt_rules 'Reject'
+	option remarks 'Reject'
+	option domain_list 'geosite:category-ads-all'
+
+config shunt_rules 'Direct'
+	option remarks 'Direct'
 	option network 'tcp,udp'
 	option domain_list '# Steam CDN
 cm.steampowered.com
@@ -111,9 +148,34 @@ lv.queniujq.cn
 alibaba.cdn.steampipe.steamcontent.com
 
 # CN Game geosite domain
-geosite:category-games@cn'
-
-	option ip_list '# Steam IP
+geosite:category-games@cn
+apple.com
+microsoft.com
+dyndns.com
+steamcontent.com
+dl.steam.clngaa.com
+dl.steam.ksyna.com
+st.dl.bscstorage.net
+st.dl.eccdnx.com
+st.dl.pinyuncloud.com
+cdn.mileweb.cs.steampowered.com.8686c.com
+cdn-ws.content.steamchina.com
+cdn-qc.content.steamchina.com
+cdn-ali.content.steamchina.com
+epicgames-download1-1251447533.file.myqcloud.com
+2026178.xyz
+081112.xyz
+geosite:private
+geosite:cn'
+	option ip_list '114.114.114.114
+114.114.115.115
+223.5.5.5
+223.6.6.6
+119.29.29.29
+180.76.76.76
+geoip:private
+geoip:cn
+# Steam IP
 45.121.184.0/24
 103.10.124.0/23
 103.28.54.0/24
@@ -136,97 +198,21 @@ geosite:category-games@cn'
 205.196.6.0/24
 208.64.200.0/22
 208.78.164.0/22
-205.185.194.0/24'
-
-config shunt_rules 'ProxyGame'
-	option remarks 'ProxyGame'
-	option domain_list '# steam 商店/客服/聊天/网页布局/API/二维码 代理URL
-steamcommunity.com
-www.steamcommunity.com
-store.steampowered.com
-checkout.steampowered.com
-api.steampowered.com
-help.steampowered.com
-login.steampowered.com
-store.akamai.steamstatic.com
-steambroadcast.akamaized.net
-steamvideo-a.akamaihd.net
-steamusercontent-a.akamaihd.net
-steamstore-a.akamaihd.net
-steamcommunity-a.akamaihd.net
-steamcdn-a.akamaihd.net
-steamuserimages-a.akamaihd.net
-community.akamai.steamstatic.com
-avatars.akamai.steamstatic.com
-community.steamstatic.com
-cdn.akamai.steamstatic.com
-avatars.steamstatic.com
-shared.akamai.steamstatic.com
-clan.akamai.steamstatic.com
-cdn.cloudflare.steamstatic.com
-community.cloudflare.steamstatic.com
-store.cloudflare.steamstatic.com
-avatars.cloudflare.steamstatic.com
-clan.cloudflare.steamstatic.com
-shared.cloudflare.steamstatic.com
-steam-chat.com
-steamcloud-ugc.storage.googleapis.com
-steamcloud-eu-ams.storage.googleapis.com
-steamcloud-eu-fra.storage.googleapis.com
-steamcloud-finland.storage.googleapis.com
-steamcloud-saopaulo.storage.googleapis.com
-steamcloud-singapore.storage.googleapis.com
-steamcloud-sydney.storage.googleapis.com
-steamcloud-taiwan.storage.googleapis.com
-steamcloud-eu.storage.googleapis.com
-
-geosite:category-games'
-
-config shunt_rules 'Direct'
-	option network 'tcp,udp'
-	option remarks 'Direct'
-	option ip_list '114.114.114.114
-114.114.115.115
-223.5.5.5
-223.6.6.6
-119.29.29.29
-180.76.76.76
+205.185.194.0/24
 '
-	option domain_list 'apple.com
-microsoft.com
-dyndns.com
-steamcontent.com
-dl.steam.clngaa.com
-dl.steam.ksyna.com
-st.dl.bscstorage.net
-st.dl.eccdnx.com
-st.dl.pinyuncloud.com
-cdn.mileweb.cs.steampowered.com.8686c.com
-cdn-ws.content.steamchina.com
-cdn-qc.content.steamchina.com
-cdn-ali.content.steamchina.com
-epicgames-download1-1251447533.file.myqcloud.com'
-
-config shunt_rules 'GooglePlay'
-	option remarks 'GooglePlay'
-	option network 'tcp,udp'
-	option domain_list 'domain:googleapis.cn
-domain:googleapis.com
-domain:xn--ngstr-lra8j.com'
-
-config shunt_rules 'Netflix'
-	option remarks 'Netflix'
-	option network 'tcp,udp'
-	option domain_list 'geosite:netflix'
-	
-config shunt_rules 'OpenAI'
-	option remarks 'OpenAI'
-	option network 'tcp,udp'
-	option domain_list 'geosite:openai'
 
 config shunt_rules 'Proxy'
-	option network 'tcp,udp'
 	option remarks 'Proxy'
+	option network 'tcp,udp'
+	option domain_list '# GooglePlay
+domain:googleapis.cn
+domain:googleapis.com
+domain:xn--ngstr-lra8j.com
+# ProxyGame
+geosite:category-games
+# GFW
+geosite:gfw
+geosite:geolocation-!cn'
 	option ip_list '149.154.160.0/20
 91.108.4.0/22
 91.108.56.0/24
@@ -251,17 +237,6 @@ config shunt_rules 'Proxy'
 2606:4700:4700::1111
 2606:4700:4700::1001
 '
-
-config shunt_rules 'GFW'
-	option remarks 'GFW'
-	option network 'tcp,udp'
-	option domain_list 'geosite:gfw'
-
-config shunt_rules 'China'
-	option remarks 'China'
-	option network 'tcp,udp'
-	option ip_list 'geoip:cn'
-	option domain_list 'geosite:cn'
 
 config shunt_rules 'QUIC'
 	option remarks 'QUIC'
