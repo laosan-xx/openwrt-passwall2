@@ -87,12 +87,13 @@
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
+	padding: 6px 10px 6px 14px !important;
 }
 .lv-dropdown-label {
 	display: inline-block;
 	overflow: hidden;
 	white-space: nowrap;
-	max-width: calc(100% - 18px);
+	max-width: calc(100% - 14px);
 }
 .lv-dropdown-panel {
 	position: fixed;
@@ -136,6 +137,12 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	text-align: left !important;
+}
+
+/* 暗黑主题适配 */
+html[data-darkmode="true"] .lv-dropdown-panel {
+    background-color: #1d293dfa !important;
+    border: 1px solid #45556cbd !important;
 }
 </style>
 
