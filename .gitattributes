@@ -1,0 +1,2 @@
+# Keep local default config when merging upstream changes
+luci-app-passwall2/root/usr/share/passwall2/0_default_config merge=ours
